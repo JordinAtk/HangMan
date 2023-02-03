@@ -53,7 +53,6 @@ fn main() {
             true => {
                 for c in &guessed_letters {
                     if *c == guess {
-                        println!("You have already guessed {}.\n", guess);
                         continue 'main;
                     }
                 }
@@ -75,10 +74,10 @@ fn main() {
 }
 
 fn choose_word(words: &Vec<String>) -> &String {
-    let mut rng = rand::thread_rng();
-    let index = rng.gen_range(0..words.len()) as usize;
+    let mut random_word = rand::thread_rng()
+        .gen_range(0..words.len()) as usize;
 
-    &words[index]
+    &words[random_word]
 }
 
 fn display_word(active: &String, guessed: &Vec<char>) {
@@ -97,8 +96,6 @@ fn display_word(active: &String, guessed: &Vec<char>) {
             print!("_ ");
         }
     }
-
-    println!();
 }
 
 fn enter_character() -> char {
@@ -127,17 +124,17 @@ fn letter_is_in_word(word: &String, guess: &char) -> bool {
 }
 
 fn victory_check(active: &String, guessed: &Vec<char>) {
-    let mut count = (0 as usize, active.len());
+    let mut count = 0 as usize;
 
     for c in active.chars() {
         for l in guessed {
             if *l == c {
-                count.0 += 1;
+                count += 1;
             }
         }
     }
     
-    if count.0 == count.1 {
+    if count == active.len() {
         println!("\nYOU WIN!!!\n");
 
         std::process::exit(0);
